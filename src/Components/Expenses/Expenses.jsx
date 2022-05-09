@@ -1,13 +1,13 @@
 import Card from "../UI/Card"
-import ExpenseItem from "../Expenses/ExpenseItem"
 import "../Expenses/Expenses.css"
 import ExpenseFilter from "./ExpenseFilter"
 import { useState } from "react/cjs/react.development"
+import ExpenseList from "./ExpenseList"
+import ExpenseChart from "./ExpenseChart"
 const Expenses = (props) => {
-  const [year, setYear] = useState("2020")
+  const [year, setYear] = useState("2021")
   const [counter, setCounter] = useState(1)
   const getYear = (year) => {
-    console.log(year)
     setYear(year)
   }
   const updateCounter = () => {
@@ -16,19 +16,18 @@ const Expenses = (props) => {
     //   return prev + 1
     // })
   }
+  const filteredExpense = props.expenses.filter(
+    (expense) => expense.date.getFullYear().toString() === year
+  )
+
   return (
     <>
       <button onClick={updateCounter}>+</button>
       <p>{counter}</p>
       <Card className="expenses">
         <ExpenseFilter selectedYear={year} onGetYear={getYear} />
-        {props.expenses.map((expense) => (
-          <ExpenseItem
-            title={expense.title}
-            amount={expense.amount}
-            date={expense.date}
-          />
-        ))}
+        <ExpenseChart expenses={filteredExpense} />
+        <ExpenseList filteredExpense={filteredExpense} />
       </Card>
     </>
   )
